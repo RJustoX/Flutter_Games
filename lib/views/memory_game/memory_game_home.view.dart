@@ -53,7 +53,7 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
                 const GameLevels(modo: Modo.normal),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 25.0),
-                  child: MemoryGameButton('Temas', () {}),
+                  child: MemoryGameButton('Temas - EM BREVE', () {}),
                 ),
                 MemoryGameButton('Voltar', () => Navigator.of(context).pop()),
               ],

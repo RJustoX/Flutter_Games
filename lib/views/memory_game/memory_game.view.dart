@@ -18,13 +18,12 @@ class MemoryGameView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Provider.of<MemoryGameController>(context);
     return Scaffold(
+      backgroundColor: AppColors.bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.mainColor,
+        backgroundColor: AppColors.secondaryColor,
         automaticallyImplyLeading: false,
         title: GameScore(modo: gamePlay.modo),
       ),
-      // body: const FeedbackGame(resultado: Resultado.eliminado),
-
       body: Observer(
         builder: (_) {
           if (controller.venceu) {
@@ -34,15 +33,14 @@ class MemoryGameView extends StatelessWidget {
           } else {
             return Center(
               child: GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: GameSettings.gameBoardAxisCount(gamePlay.nivel),
-                mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
-                padding: const EdgeInsets.all(20.0),
-                children: controller.gameCards
-                    .map((GameOpcao go) => CardGame(modo: gamePlay.modo, gameOpcao: go))
-                    .toList(),
-              ),
+                  shrinkWrap: true,
+                  crossAxisCount: GameSettings.gameBoardAxisCount(gamePlay.nivel),
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
+                  padding: const EdgeInsets.all(20.0),
+                  children: controller.gameCards
+                      .map((GameOpcao go) => CardGame(modo: gamePlay.modo, gameOpcao: go))
+                      .toList()),
             );
           }
         },
@@ -56,9 +54,7 @@ class FeedbackGame extends StatelessWidget {
 
   const FeedbackGame({Key? key, required this.resultado}) : super(key: key);
 
-  String getResultado() {
-    return resultado == Resultado.win ? 'Você venceu!' : 'Você perdeu!';
-  }
+  String getResultado() => resultado == Resultado.win ? 'Muito bem!' : 'Não foi dessa vez!';
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +65,14 @@ class FeedbackGame extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${getResultado().toUpperCase()}!',
+            getResultado(),
             style: const TextStyle(fontSize: 30),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: Image.asset(
               'assets/imgs/memory_game/${resultado == Resultado.win ? 'aprovado' : 'eliminado'}.png',
+              scale: 2.0,
             ),
           ),
           resultado == Resultado.loss
@@ -97,11 +94,7 @@ class CardGame extends StatefulWidget {
   final Modo modo;
   final GameOpcao gameOpcao;
 
-  const CardGame({
-    Key? key,
-    required this.modo,
-    required this.gameOpcao,
-  }) : super(key: key);
+  const CardGame({Key? key, required this.modo, required this.gameOpcao}) : super(key: key);
 
   @override
   State<CardGame> createState() => _CardGameState();
@@ -168,16 +161,14 @@ class _CardGameState extends State<CardGame> with SingleTickerProviderStateMixin
             alignment: Alignment.center,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.transparent,
+                color: widget.modo == Modo.normal ? AppColors.mainColor : AppColors.secondaryColor,
                 border: Border.all(
-                  color: widget.modo == Modo.normal ? Colors.white : Colors.red,
+                  color:
+                      widget.modo == Modo.normal ? AppColors.secondaryColor : AppColors.mainColor,
                   width: 2,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: getImage(angulo),
-                ),
+                image: DecorationImage(fit: BoxFit.fill, image: getImage(angulo)),
               ),
             ),
           ),
