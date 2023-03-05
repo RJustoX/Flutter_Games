@@ -52,8 +52,8 @@ flutter:
   fonts:
     - family: Gilam
       fonts:
-        - asset: assets/fonts/gilam_bold.ttf
-        - asset: assets/fonts/gilam_regular.ttf
+        - asset: assets/fonts/gilam-bold.ttf
+        - asset: assets/fonts/gilam-regular.ttf
 
   assets:
     - assets/imgs/
