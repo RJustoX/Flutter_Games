@@ -75,7 +75,7 @@ class FeedbackGame extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: Image.asset(
-              'assets/game/${resultado == Resultado.win ? 'aprovado' : 'eliminado'}.png',
+              'assets/imgs/memory_game/${resultado == Resultado.win ? 'aprovado' : 'eliminado'}.png',
             ),
           ),
           resultado == Resultado.loss
@@ -127,11 +127,11 @@ class _CardGameState extends State<CardGame> with SingleTickerProviderStateMixin
 
   AssetImage getImage(double angulo) {
     if (angulo > 0.5 * pi) {
-      return AssetImage('assets/game/${widget.gameOpcao.opcao.toString()}.png');
+      return AssetImage('assets/imgs/memory_game/${widget.gameOpcao.opcao.toString()}.png');
     } else {
       return widget.modo == Modo.normal
-          ? const AssetImage('assets/game/card_normal.png')
-          : const AssetImage('assets/game/card_round.png');
+          ? const AssetImage('assets/imgs/memory_game/card_normal.png')
+          : const AssetImage('assets/imgs/memory_game/card_round.png');
     }
   }
 
