@@ -44,6 +44,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Refazer stores app:
+  # flutter packages pub run build_runner build clean --delete-conflicting-outputs
+  build_runner: ^2.1.7
+  mobx_codegen: ^2.1.1
   flutter_lints: ^2.0.0
 
 flutter:
