@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_games/components/memory_game/memory_game_button.component.dart';
 import 'package:flutter_games/utils/app_colors.dart';
 import 'package:flutter_games/utils/constants/memory_game.constants.dart';
 
@@ -22,24 +23,40 @@ class MemoryGameNormalFeedback extends StatelessWidget implements MemoryGameFeed
 
   @override
   Widget build(BuildContext context) {
-    print(result.name);
     return SafeArea(
       child: Container(
-        color: AppColors.bgColor,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Text(
-                won ? 'Ganhou' : 'Perdeu',
+        width: double.maxFinite,
+        color: AppColors.neutral,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 45.0),
+          child: Column(
+            children: [
+              Text(
+                won ? 'Você ganhou!' : 'Perdeu',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gilam',
+                  color: AppColors.secondaryColor,
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ],
+              Text(
+                won ? 'Novo nível desbloqueado' : 'Você sempre pode tentar denovo',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Gilam',
+                  color: AppColors.secondaryColor,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              MemoryGameButton('Próximo nivel', () => Navigator.of(context).pop()),
+              const SizedBox(height: 10.0),
+              MemoryGameButton('Voltar', () => Navigator.of(context).pop(), invertColors: true),
+            ],
+          ),
         ),
       ),
     );
