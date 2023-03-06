@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_games/components/memory_game/memory_game_button.component.dart';
+import 'package:flutter_games/components/memory_game/memory_game_feedback.factory.dart';
 import 'package:flutter_games/controllers/memory_game/memory_game.controller.dart';
 import 'package:flutter_games/models/memory_game/memory_game.model.dart';
 import 'package:flutter_games/utils/app_colors.dart';
@@ -9,84 +9,54 @@ import 'package:flutter_games/utils/constants/memory_game.constants.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-class MemoryGameView extends StatelessWidget {
+class MemoryGameView extends StatefulWidget {
   final GamePlay gamePlay;
 
   const MemoryGameView({Key? key, required this.gamePlay}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final MemoryGameController controller = Provider.of<MemoryGameController>(context);
-
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.secondaryColor,
-        automaticallyImplyLeading: false,
-        title: GameScore(modo: gamePlay.modo),
-      ),
-      body: Observer(
-        builder: (_) {
-          if (controller.won) {
-            return const MemoryGameFeedback(result: MemoryGameResult.win);
-          } else if (controller.lose) {
-            return const MemoryGameFeedback(result: MemoryGameResult.loss);
-          } else {
-            return Center(
-              child: GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: GameSettings.gameBoardAxisCount(gamePlay.nivel),
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
-                  padding: const EdgeInsets.all(20.0),
-                  children: controller.gameCards
-                      .map((GameOption go) => CardGame(mode: gamePlay.modo, gameOpcao: go))
-                      .toList()),
-            );
-          }
-        },
-      ),
-    );
-  }
+  State<MemoryGameView> createState() => _MemoryGameViewState();
 }
 
-class MemoryGameFeedback extends StatelessWidget {
-  final MemoryGameResult result;
+class _MemoryGameViewState extends State<MemoryGameView> {
+  MemoryGameController? controller;
 
-  const MemoryGameFeedback({Key? key, required this.result}) : super(key: key);
+  @override
+  void didChangeDependencies() {
+    controller ??= Provider.of<MemoryGameController>(context);
 
-  String getResultado() => result == MemoryGameResult.win ? 'Muito bem!' : 'Não foi dessa vez!';
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<MemoryGameController>();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            getResultado(),
-            style: const TextStyle(fontSize: 30),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: Image.asset(
-              'assets/imgs/memory_game/${result == MemoryGameResult.win ? 'aprovado' : 'eliminado'}.png',
-              scale: 2.0,
-            ),
-          ),
-          result == MemoryGameResult.loss
-              ? MemoryGameButton(
-                  'Tentar novamente',
-                  () => controller.restartGame(),
+    return Observer(
+      builder: (context) {
+        return Scaffold(
+          backgroundColor: AppColors.neutral,
+          appBar: controller!.status == MemoryGameStatus.running
+              ? AppBar(
+                  backgroundColor: AppColors.secondaryColor,
+                  automaticallyImplyLeading: false,
+                  title: GameScore(modo: widget.gamePlay.modo),
                 )
-              : MemoryGameButton(
-                  'Próximo Nível',
-                  () => controller.nextLevel(),
+              : null,
+          body: controller!.status == MemoryGameStatus.running
+              ? Center(
+                  child: GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: GameSettings.gameBoardAxisCount(widget.gamePlay.nivel),
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 15,
+                      padding: const EdgeInsets.all(20.0),
+                      children: controller!.gameCards
+                          .map((GameOption go) =>
+                              CardGame(widget.gamePlay.modo, go, () => setState(() {})))
+                          .toList()),
                 )
-        ],
-      ),
+              : MemoryGameFeedbackFactory(widget.gamePlay.modo, controller!.status),
+        );
+      },
     );
   }
 }
@@ -95,8 +65,9 @@ class CardGame extends StatefulWidget {
   final MemoryGameMode mode;
   final GameOption gameOpcao;
 
-  const CardGame({Key? key, required this.mode, required this.gameOpcao}) : super(key: key);
+  const CardGame(this.mode, this.gameOpcao, this.callback, {super.key});
 
+  final VoidCallback callback;
   @override
   State<CardGame> createState() => _CardGameState();
 }
@@ -107,10 +78,7 @@ class _CardGameState extends State<CardGame> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    animation = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
+    animation = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
   }
 
   @override
@@ -141,9 +109,7 @@ class _CardGameState extends State<CardGame> with SingleTickerProviderStateMixin
     }
   }
 
-  resetCard() {
-    animation.reverse();
-  }
+  resetCard() => animation.reverse();
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +129,7 @@ class _CardGameState extends State<CardGame> with SingleTickerProviderStateMixin
             child: Container(
               decoration: BoxDecoration(
                 color: widget.mode == MemoryGameMode.normal
-                    ? AppColors.mainColor
+                    ? AppColors.bgColor
                     : AppColors.secondaryColor,
                 border: Border.all(
                   color: widget.mode == MemoryGameMode.normal
@@ -195,7 +161,7 @@ class GameScore extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(modo == MemoryGameMode.chalenge ? Icons.my_location : Icons.touch_app_rounded),
+            Icon(modo == MemoryGameMode.byPlays ? Icons.my_location : Icons.touch_app_rounded),
             const SizedBox(width: 10),
             Observer(
                 builder: (_) =>

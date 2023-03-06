@@ -12,10 +12,7 @@ abstract class MemoryGameControllerBase with Store {
   @observable
   int score = 0;
   @observable
-  bool won = false;
-  @observable
-  bool lose = false;
-
+  MemoryGameStatus status = MemoryGameStatus.loading;
   late GamePlay _gamePlay;
   List<GameOption> _escolha = [];
   List<Function> _escolhaCallback = [];
@@ -48,11 +45,11 @@ abstract class MemoryGameControllerBase with Store {
   }
 
   startGame({required GamePlay gamePlay}) {
+    status = MemoryGameStatus.running;
     _gamePlay = gamePlay;
     _acertos = 0;
     _numPares = (_gamePlay.nivel / 2).round();
-    won = false;
-    lose = false;
+
     _resetScore();
     _generateCards();
   }
@@ -104,15 +101,19 @@ abstract class MemoryGameControllerBase with Store {
   }
 
   _checkResultModoNormal(bool allMatched) async {
-    await Future.delayed(const Duration(seconds: 1), () => won = allMatched);
+    await Future.delayed(const Duration(seconds: 1), () {
+      if (allMatched) status = MemoryGameStatus.win;
+    });
   }
 
   _checkResultModoRound6(bool allMatched) async {
     if (_chancesAcabaram()) {
-      await Future.delayed(const Duration(milliseconds: 400), () => lose = true);
+      await Future.delayed(const Duration(milliseconds: 400), () => status = MemoryGameStatus.loss);
     }
     if (allMatched && score >= 0) {
-      await Future.delayed(const Duration(seconds: 1), () => won = allMatched);
+      await Future.delayed(const Duration(seconds: 1), () {
+        if (allMatched) status = MemoryGameStatus.win;
+      });
     }
   }
 

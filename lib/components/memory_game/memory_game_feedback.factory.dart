@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_games/components/memory_game/memory_game_button.component.dart';
+import 'package:flutter_games/controllers/memory_game/memory_game.controller.dart';
 import 'package:flutter_games/utils/app_colors.dart';
 import 'package:flutter_games/utils/constants/memory_game.constants.dart';
+import 'package:provider/provider.dart';
 
 abstract class MemoryGameFeedbackFactory extends Widget {
   factory MemoryGameFeedbackFactory(MemoryGameMode mode, MemoryGameStatus status) {
-    print(status.name);
     return <MemoryGameMode, MemoryGameFeedbackFactory>{
       MemoryGameMode.normal: MemoryGameNormalFeedback(mode, status),
       MemoryGameMode.byPlays: MemoryGameNormalFeedback(mode, status),
@@ -23,6 +24,8 @@ class MemoryGameNormalFeedback extends StatelessWidget implements MemoryGameFeed
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.read<MemoryGameController>();
+
     return SafeArea(
       child: Container(
         width: double.maxFinite,
@@ -52,7 +55,7 @@ class MemoryGameNormalFeedback extends StatelessWidget implements MemoryGameFeed
                 ),
               ),
               const Spacer(),
-              MemoryGameButton('Próximo nivel', () => Navigator.of(context).pop()),
+              MemoryGameButton('Próximo nivel', () => controller.nextLevel()),
               const SizedBox(height: 10.0),
               MemoryGameButton('Voltar', () => Navigator.of(context).pop(), invertColors: true),
             ],

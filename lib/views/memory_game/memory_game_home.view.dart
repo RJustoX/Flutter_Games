@@ -19,7 +19,7 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.mainColor,
+      backgroundColor: AppColors.neutral,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -57,58 +57,6 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
                 ),
                 MemoryGameButton('Voltar', () => Navigator.of(context).pop()),
               ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CardNivel extends StatelessWidget {
-  final GamePlay gamePlay;
-
-  const CardNivel({Key? key, required this.gamePlay}) : super(key: key);
-
-  startGame(BuildContext context) {
-    context.read<MemoryGameController>().startGame(gamePlay: gamePlay);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (BuildContext context) => MemoryGameView(gamePlay: gamePlay),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => startGame(context),
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      child: Container(
-        width: 90,
-        height: 90,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: gamePlay.modo == MemoryGameMode.normal
-                ? AppColors.secondaryColor
-                : AppColors.bgColor,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          color:
-              gamePlay.modo == MemoryGameMode.normal ? AppColors.bgColor : AppColors.secondaryColor,
-        ),
-        child: Center(
-          child: Text(
-            gamePlay.nivel.toString(),
-            style: const TextStyle(
-              fontSize: 22.0,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Gilam',
-              color: AppColors.secondaryColor,
             ),
           ),
         ),

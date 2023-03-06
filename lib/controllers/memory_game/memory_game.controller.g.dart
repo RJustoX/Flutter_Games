@@ -17,7 +17,8 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
               name: 'MemoryGameControllerBase.jogadaCompleta'))
           .value;
 
-  late final _$gameCardsAtom = Atom(name: 'MemoryGameControllerBase.gameCards', context: context);
+  late final _$gameCardsAtom =
+      Atom(name: 'MemoryGameControllerBase.gameCards', context: context);
 
   @override
   List<GameOption> get gameCards {
@@ -32,7 +33,8 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
     });
   }
 
-  late final _$scoreAtom = Atom(name: 'MemoryGameControllerBase.score', context: context);
+  late final _$scoreAtom =
+      Atom(name: 'MemoryGameControllerBase.score', context: context);
 
   @override
   int get score {
@@ -47,33 +49,19 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
     });
   }
 
-  late final _$venceuAtom = Atom(name: 'MemoryGameControllerBase.venceu', context: context);
+  late final _$statusAtom =
+      Atom(name: 'MemoryGameControllerBase.status', context: context);
 
   @override
-  bool get won {
-    _$venceuAtom.reportRead();
-    return super.won;
+  MemoryGameStatus get status {
+    _$statusAtom.reportRead();
+    return super.status;
   }
 
   @override
-  set won(bool value) {
-    _$venceuAtom.reportWrite(value, super.won, () {
-      super.won = value;
-    });
-  }
-
-  late final _$perdeuAtom = Atom(name: 'MemoryGameControllerBase.perdeu', context: context);
-
-  @override
-  bool get lose {
-    _$perdeuAtom.reportRead();
-    return super.lose;
-  }
-
-  @override
-  set lose(bool value) {
-    _$perdeuAtom.reportWrite(value, super.lose, () {
-      super.lose = value;
+  set status(MemoryGameStatus value) {
+    _$statusAtom.reportWrite(value, super.status, () {
+      super.status = value;
     });
   }
 
@@ -82,8 +70,7 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
     return '''
 gameCards: ${gameCards},
 score: ${score},
-venceu: ${won},
-perdeu: ${lose},
+status: ${status},
 jogadaCompleta: ${jogadaCompleta}
     ''';
   }
