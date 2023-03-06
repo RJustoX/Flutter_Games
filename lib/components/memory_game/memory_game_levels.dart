@@ -4,7 +4,7 @@ import 'package:flutter_games/utils/constants/memory_game.constants.dart';
 import 'package:flutter_games/views/memory_game/memory_game_home.view.dart';
 
 class GameLevels extends StatelessWidget {
-  final Modo modo;
+  final MemoryGameMode modo;
 
   const GameLevels({Key? key, required this.modo}) : super(key: key);
 

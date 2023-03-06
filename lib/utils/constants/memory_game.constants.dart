@@ -1,6 +1,6 @@
-enum Modo { normal, chalenge }
+enum MemoryGameMode { normal, chalenge }
 
-enum Resultado { win, loss }
+enum MemoryGameResult { win, loss }
 
 class GameSettings {
   static const niveis = [6, 8, 10, 12, 16, 18, 20, 24, 28];

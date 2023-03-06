@@ -17,24 +17,22 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
               name: 'MemoryGameControllerBase.jogadaCompleta'))
           .value;
 
-  late final _$gameCardsAtom =
-      Atom(name: 'MemoryGameControllerBase.gameCards', context: context);
+  late final _$gameCardsAtom = Atom(name: 'MemoryGameControllerBase.gameCards', context: context);
 
   @override
-  List<GameOpcao> get gameCards {
+  List<GameOption> get gameCards {
     _$gameCardsAtom.reportRead();
     return super.gameCards;
   }
 
   @override
-  set gameCards(List<GameOpcao> value) {
+  set gameCards(List<GameOption> value) {
     _$gameCardsAtom.reportWrite(value, super.gameCards, () {
       super.gameCards = value;
     });
   }
 
-  late final _$scoreAtom =
-      Atom(name: 'MemoryGameControllerBase.score', context: context);
+  late final _$scoreAtom = Atom(name: 'MemoryGameControllerBase.score', context: context);
 
   @override
   int get score {
@@ -49,35 +47,33 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
     });
   }
 
-  late final _$venceuAtom =
-      Atom(name: 'MemoryGameControllerBase.venceu', context: context);
+  late final _$venceuAtom = Atom(name: 'MemoryGameControllerBase.venceu', context: context);
 
   @override
-  bool get venceu {
+  bool get won {
     _$venceuAtom.reportRead();
-    return super.venceu;
+    return super.won;
   }
 
   @override
-  set venceu(bool value) {
-    _$venceuAtom.reportWrite(value, super.venceu, () {
-      super.venceu = value;
+  set won(bool value) {
+    _$venceuAtom.reportWrite(value, super.won, () {
+      super.won = value;
     });
   }
 
-  late final _$perdeuAtom =
-      Atom(name: 'MemoryGameControllerBase.perdeu', context: context);
+  late final _$perdeuAtom = Atom(name: 'MemoryGameControllerBase.perdeu', context: context);
 
   @override
-  bool get perdeu {
+  bool get lose {
     _$perdeuAtom.reportRead();
-    return super.perdeu;
+    return super.lose;
   }
 
   @override
-  set perdeu(bool value) {
-    _$perdeuAtom.reportWrite(value, super.perdeu, () {
-      super.perdeu = value;
+  set lose(bool value) {
+    _$perdeuAtom.reportWrite(value, super.lose, () {
+      super.lose = value;
     });
   }
 
@@ -86,8 +82,8 @@ mixin _$MemoryGameController on MemoryGameControllerBase, Store {
     return '''
 gameCards: ${gameCards},
 score: ${score},
-venceu: ${venceu},
-perdeu: ${perdeu},
+venceu: ${won},
+perdeu: ${lose},
 jogadaCompleta: ${jogadaCompleta}
     ''';
   }

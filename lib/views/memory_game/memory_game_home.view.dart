@@ -50,7 +50,7 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
                     ),
                   ),
                 ),
-                const GameLevels(modo: Modo.normal),
+                const GameLevels(modo: MemoryGameMode.normal),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 25.0),
                   child: MemoryGameButton('Temas - EM BREVE', () {}),
@@ -93,10 +93,13 @@ class CardNivel extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: gamePlay.modo == Modo.normal ? AppColors.secondaryColor : AppColors.bgColor,
+            color: gamePlay.modo == MemoryGameMode.normal
+                ? AppColors.secondaryColor
+                : AppColors.bgColor,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
-          color: gamePlay.modo == Modo.normal ? AppColors.bgColor : AppColors.secondaryColor,
+          color:
+              gamePlay.modo == MemoryGameMode.normal ? AppColors.bgColor : AppColors.secondaryColor,
         ),
         child: Center(
           child: Text(

@@ -8,16 +8,16 @@ class MemoryGameController = MemoryGameControllerBase with _$MemoryGameControlle
 
 abstract class MemoryGameControllerBase with Store {
   @observable
-  List<GameOpcao> gameCards = [];
+  List<GameOption> gameCards = [];
   @observable
   int score = 0;
   @observable
-  bool venceu = false;
+  bool won = false;
   @observable
-  bool perdeu = false;
+  bool lose = false;
 
   late GamePlay _gamePlay;
-  List<GameOpcao> _escolha = [];
+  List<GameOption> _escolha = [];
   List<Function> _escolhaCallback = [];
   int _acertos = 0;
   int _numPares = 0;
@@ -34,30 +34,39 @@ abstract class MemoryGameControllerBase with Store {
   //   });
   // }
 
+  _chancesAcabaram() => score < _numPares - _acertos;
+
+  _updateScore() => _gamePlay.modo == MemoryGameMode.normal ? score++ : score--;
+
+  restartGame() => startGame(gamePlay: _gamePlay);
+
+  _resetScore() => _gamePlay.modo == MemoryGameMode.normal ? score = 0 : score = _gamePlay.nivel;
+
+  _resetJogada() {
+    _escolha = [];
+    _escolhaCallback = [];
+  }
+
   startGame({required GamePlay gamePlay}) {
     _gamePlay = gamePlay;
     _acertos = 0;
     _numPares = (_gamePlay.nivel / 2).round();
-    venceu = false;
-    perdeu = false;
+    won = false;
+    lose = false;
     _resetScore();
     _generateCards();
-  }
-
-  _resetScore() {
-    _gamePlay.modo == Modo.normal ? score = 0 : score = _gamePlay.nivel;
   }
 
   _generateCards() {
     List<int> cardOpcoes = GameSettings.cardOpcoes.sublist(0)..shuffle();
     cardOpcoes = cardOpcoes.sublist(0, _numPares);
     gameCards = [...cardOpcoes, ...cardOpcoes]
-        .map((opcao) => GameOpcao(opcao: opcao, matched: false, selected: false))
+        .map((opcao) => GameOption(opcao: opcao, matched: false, selected: false))
         .toList();
     gameCards.shuffle();
   }
 
-  escolher(GameOpcao opcao, Function resetCard) async {
+  escolher(GameOption opcao, Function resetCard) async {
     opcao.selected = true;
     _escolha.add(opcao);
     _escolhaCallback.add(resetCard);
@@ -87,7 +96,7 @@ abstract class MemoryGameControllerBase with Store {
 
   _checkGameResult() async {
     bool allMatched = _acertos == _numPares;
-    if (_gamePlay.modo == Modo.normal) {
+    if (_gamePlay.modo == MemoryGameMode.normal) {
       await _checkResultModoNormal(allMatched);
     } else {
       await _checkResultModoRound6(allMatched);
@@ -95,33 +104,16 @@ abstract class MemoryGameControllerBase with Store {
   }
 
   _checkResultModoNormal(bool allMatched) async {
-    await Future.delayed(const Duration(seconds: 1), () => venceu = allMatched);
+    await Future.delayed(const Duration(seconds: 1), () => won = allMatched);
   }
 
   _checkResultModoRound6(bool allMatched) async {
     if (_chancesAcabaram()) {
-      await Future.delayed(const Duration(milliseconds: 400), () => perdeu = true);
+      await Future.delayed(const Duration(milliseconds: 400), () => lose = true);
     }
     if (allMatched && score >= 0) {
-      await Future.delayed(const Duration(seconds: 1), () => venceu = allMatched);
+      await Future.delayed(const Duration(seconds: 1), () => won = allMatched);
     }
-  }
-
-  _chancesAcabaram() {
-    return score < _numPares - _acertos;
-  }
-
-  _resetJogada() {
-    _escolha = [];
-    _escolhaCallback = [];
-  }
-
-  _updateScore() {
-    _gamePlay.modo == Modo.normal ? score++ : score--;
-  }
-
-  restartGame() {
-    startGame(gamePlay: _gamePlay);
   }
 
   nextLevel() {
