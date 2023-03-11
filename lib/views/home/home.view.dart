@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_games/utils/app_colors.dart';
-import 'package:flutter_games/utils/app_images.dart';
+import 'package:flutter_games/utils/constants/imgs_util/app_images.dart';
 import 'package:flutter_games/views/memory_game/memory_game_home.view.dart';
 
 class HomeView extends StatefulWidget {

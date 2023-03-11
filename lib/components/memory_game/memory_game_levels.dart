@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_games/controllers/memory_game/memory_game.controller.dart';
 import 'package:flutter_games/models/memory_game/memory_game.model.dart';
 import 'package:flutter_games/utils/app_colors.dart';
+import 'package:flutter_games/utils/constants/imgs_util/memory_game_images.dart';
 import 'package:flutter_games/utils/constants/memory_game.constants.dart';
 import 'package:flutter_games/views/memory_game/memory_game.view.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +14,26 @@ class GameLevels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final niveis = GameSettings.niveis
+    final List<CardNivel> niveis = GameSettings.levels
         .map((n) => CardNivel(gamePlay: GamePlay(modo: modo, nivel: n)))
         .toList();
 
     return Flexible(
-      child: GridView.count(
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 3,
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 20,
-        children: niveis,
+      child: Container(
+        height: MediaQuery.of(context).size.width - 100,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(MemoryImages.levelsLine),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(AppColors.secondaryColor, BlendMode.modulate)),
+        ),
+        child: GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+          children: niveis,
+        ),
       ),
     );
   }
