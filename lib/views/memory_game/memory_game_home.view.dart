@@ -31,11 +31,11 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Loja'),
-        BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Jogar'),
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Temas'),
-      ]),
+      // bottomNavigationBar: BottomNavigationBar(items: const [
+      //   BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Loja'),
+      //   BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Jogar'),
+      //   BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Temas'),
+      // ]),
     );
   }
 }
