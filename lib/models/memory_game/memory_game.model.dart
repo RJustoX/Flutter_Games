@@ -2,7 +2,7 @@ import 'package:flutter_games/utils/constants/memory_game.constants.dart';
 
 class GamePlay {
   MemoryGameMode modo;
-  int nivel;
+  GameLevel nivel;
 
   GamePlay({required this.modo, required this.nivel});
 }

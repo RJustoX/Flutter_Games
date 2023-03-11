@@ -14,7 +14,7 @@ class GameLevels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<CardNivel> niveis = GameSettings.levels
+    final List<CardNivel> niveis = GameSettings.levelsForMenu
         .map((n) => CardNivel(gamePlay: GamePlay(modo: modo, nivel: n)))
         .toList();
 
@@ -77,7 +77,7 @@ class CardNivel extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            gamePlay.nivel.toString(),
+            gamePlay.nivel.cards.toString(),
             style: const TextStyle(
               fontSize: 22.0,
               fontWeight: FontWeight.w700,

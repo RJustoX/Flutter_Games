@@ -45,7 +45,7 @@ class _MemoryGameViewState extends State<MemoryGameView> {
               ? Center(
                   child: GridView.count(
                       shrinkWrap: true,
-                      crossAxisCount: GameSettings.gameBoardAxisCount(widget.gamePlay.nivel),
+                      crossAxisCount: GameSettings.gameBoardAxisCount(widget.gamePlay.nivel.level),
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 15,
                       padding: const EdgeInsets.all(20.0),

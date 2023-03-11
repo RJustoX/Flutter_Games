@@ -37,7 +37,8 @@ abstract class MemoryGameControllerBase with Store {
 
   restartGame() => startGame(gamePlay: _gamePlay);
 
-  _resetScore() => _gamePlay.modo == MemoryGameMode.normal ? score = 0 : score = _gamePlay.nivel;
+  _resetScore() =>
+      _gamePlay.modo == MemoryGameMode.normal ? score = 0 : score = _gamePlay.nivel.cards;
 
   _resetJogada() {
     _escolha = [];
@@ -48,7 +49,7 @@ abstract class MemoryGameControllerBase with Store {
     status = MemoryGameStatus.running;
     _gamePlay = gamePlay;
     _acertos = 0;
-    _numPares = (_gamePlay.nivel / 2).round();
+    _numPares = (_gamePlay.nivel.cards / 2).round();
 
     _resetScore();
     _generateCards();
