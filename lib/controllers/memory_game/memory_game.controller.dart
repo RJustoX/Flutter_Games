@@ -55,7 +55,7 @@ abstract class MemoryGameControllerBase with Store {
   }
 
   _generateCards() {
-    List<int> cardOpcoes = GameSettings.cardOpcoes.sublist(0)..shuffle();
+    List<int> cardOpcoes = GameSettings.cardOptions.sublist(0)..shuffle();
     cardOpcoes = cardOpcoes.sublist(0, _numPares);
     gameCards = [...cardOpcoes, ...cardOpcoes]
         .map((opcao) => GameOption(opcao: opcao, matched: false, selected: false))
@@ -120,11 +120,11 @@ abstract class MemoryGameControllerBase with Store {
   nextLevel() {
     int nivelIndex = 0;
 
-    if (_gamePlay.nivel != GameSettings.niveis.last) {
-      nivelIndex = GameSettings.niveis.indexOf(_gamePlay.nivel) + 1;
+    if (_gamePlay.nivel != GameSettings.levels.last) {
+      nivelIndex = GameSettings.levels.indexOf(_gamePlay.nivel) + 1;
     }
 
-    _gamePlay.nivel = GameSettings.niveis[nivelIndex];
+    _gamePlay.nivel = GameSettings.levels[nivelIndex];
     startGame(gamePlay: _gamePlay);
   }
 }
