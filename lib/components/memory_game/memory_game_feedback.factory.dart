@@ -94,7 +94,7 @@ class _MemoryGameNormalFeedbackState extends State<MemoryGameNormalFeedback> {
                       child: VideoPlayer(_videoController),
                     );
                   } else {
-                    return const Text('waiting for video to load');
+                    return const SizedBox.shrink();
                   }
                 },
               ),

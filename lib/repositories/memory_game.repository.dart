@@ -26,7 +26,6 @@ abstract class MemoryGameRepositoryBase with Store {
   }
 
   _initDatabase() async {
-    print('inicio');
     _recordes = await Hive.openBox('memoryGameRecordes');
   }
 
