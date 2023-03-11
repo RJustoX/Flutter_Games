@@ -1,4 +1,5 @@
 import 'package:flutter_games/models/memory_game/memory_game.model.dart';
+import 'package:flutter_games/repositories/memory_game.repository.dart';
 import 'package:flutter_games/utils/constants/memory_game.constants.dart';
 import 'package:mobx/mobx.dart';
 
@@ -18,18 +19,18 @@ abstract class MemoryGameControllerBase with Store {
   List<Function> _escolhaCallback = [];
   int _acertos = 0;
   int _numPares = 0;
-  //RecordesRepository recordesRepository;
+  MemoryGameRepository recordesRepository;
 
   @computed
   bool get jogadaCompleta => (_escolha.length == 2);
 
-  // MemoryGameControllerBase({required this.recordesRepository}) {
-  //   reaction((_) => venceu == true, (bool ganhou) {
-  //     if (ganhou) {
-  //       recordesRepository.updateRecordes(gamePlay: _gamePlay, score: score);
-  //     }
-  //   });
-  // }
+  MemoryGameControllerBase({required this.recordesRepository}) {
+    reaction((_) => status == MemoryGameStatus.win, (bool won) {
+      if (won) {
+        recordesRepository.updateRecordes(gamePlay: _gamePlay, score: score);
+      }
+    });
+  }
 
   _chancesAcabaram() => score < _numPares - _acertos;
 

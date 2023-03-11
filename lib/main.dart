@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_games/controllers/memory_game/memory_game.controller.dart';
+import 'package:flutter_games/repositories/memory_game.repository.dart';
 import 'package:flutter_games/views/home/home.view.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [Provider<MemoryGameController>.value(value: MemoryGameController())],
+      providers: [
+        Provider<MemoryGameRepository>(create: (_) => MemoryGameRepository()),
+        ProxyProvider<MemoryGameRepository, MemoryGameController>(
+          update: (_, repo, __) => MemoryGameController(recordesRepository: repo),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
