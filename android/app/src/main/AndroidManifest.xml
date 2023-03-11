@@ -1,5 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.justo.flutter_games">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.justo.flutter_games">
+
+  <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
         android:label="flutter_games"
         android:name="${applicationName}"
