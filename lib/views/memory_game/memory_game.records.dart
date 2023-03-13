@@ -82,6 +82,10 @@ class _MemoryGameRecordsViewState extends State<MemoryGameRecordsView> {
 
     return Scaffold(
       backgroundColor: AppColors.neutral,
+      appBar: AppBar(
+        title: const Text('Recordes'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),

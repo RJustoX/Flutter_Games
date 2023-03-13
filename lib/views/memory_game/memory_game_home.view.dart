@@ -15,6 +15,7 @@ class MemoryGameHomeView extends StatefulWidget {
 
 class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
   late VideoPlayerController _buttonAnimation;
+  PageController? _pController;
   bool startedPlaying = false;
 
   @override
@@ -23,6 +24,12 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
 
     _buttonAnimation = VideoPlayerController.asset('assets/imgs/memory_game/records_button.mp4');
     _buttonAnimation.addListener(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    _pController ??= PageController(initialPage: 0);
+    super.didChangeDependencies();
   }
 
   @override
@@ -43,10 +50,50 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
     return Scaffold(
       backgroundColor: AppColors.neutral,
       body: SafeArea(
-        child: Center(
-          child: Stack(
-            children: [
-              Padding(
+        child: PageView(
+          controller: _pController,
+          scrollDirection: Axis.vertical,
+          children: [
+            Center(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0, 60.0, 50.0, 100.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const <Widget>[
+                        MemoryGameLogo(),
+                        GameLevels(modo: MemoryGameMode.normal),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: (MediaQuery.of(context).size.height / 3) - 110,
+                    right: 5.0,
+                    child: recordsButton(),
+                  ),
+                  Positioned(
+                    bottom: 25.0,
+                    right: MediaQuery.of(context).size.width / 2 - 30.0,
+                    child: IconButton(
+                      iconSize: 40,
+                      splashRadius: 25.0,
+                      onPressed: () => _pController!.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      ),
+                      icon: const Icon(
+                        Icons.keyboard_double_arrow_down_sharp,
+                        color: AppColors.secondaryColor,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Center(
+              child: Padding(
                 padding: const EdgeInsets.fromLTRB(50.0, 60.0, 50.0, 100.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,43 +104,45 @@ class _MemoryGameHomeViewState extends State<MemoryGameHomeView> {
                   ],
                 ),
               ),
-              Positioned(
-                top: (MediaQuery.of(context).size.height / 3) - 80,
-                right: 5.0,
-                child: FutureBuilder<bool>(
-                  future: started(),
-                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                    if (snapshot.data ?? false) {
-                      return GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (BuildContext context) => const MemoryGameRecordsView(
-                              modo: MemoryGameMode.normal,
-                            ),
-                          ),
-                        ),
-                        child: SizedBox.square(
-                          dimension: 80,
-                          child: VideoPlayer(_buttonAnimation),
-                        ),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Loja'),
+          BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Jogar'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Temas'),
+        ],
+      ),
+    );
+  }
 
-      // bottomNavigationBar: BottomNavigationBar(items: const [
-      //   BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Loja'),
-      //   BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Jogar'),
-      //   BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Temas'),
-      // ]),
+  Widget recordsButton() {
+    return SizedBox(
+      child: FutureBuilder<bool>(
+        future: started(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.data ?? false) {
+            return GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (BuildContext context) => const MemoryGameRecordsView(
+                    modo: MemoryGameMode.normal,
+                  ),
+                ),
+              ),
+              child: SizedBox.square(
+                dimension: 80,
+                child: VideoPlayer(_buttonAnimation),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
     );
   }
 }
