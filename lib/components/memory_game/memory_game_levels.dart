@@ -77,7 +77,7 @@ class CardNivel extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            gamePlay.nivel.cards.toString(),
+            gamePlay.nivel.level.toString(),
             style: const TextStyle(
               fontSize: 22.0,
               fontWeight: FontWeight.w700,
